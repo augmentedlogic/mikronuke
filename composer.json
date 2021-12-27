@@ -1,0 +1,20 @@
+{
+    "name": "augmentedlogic/mikronuke",
+    "description": "A small framework for webservices",
+    "homepage": "https://developer.augmentedlogic.com",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Wolfgang Hauptfleisch",
+            "email": "dev@augmentedlogic.com"
+        }
+    ],
+    "require": {
+       "php": ">=7.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "com\\augmentedlogic\\mikronuke\\": "src"
+        }
+    }
+}
