@@ -9,7 +9,7 @@ class Setup
 {
 
 
-      public static function runSetup()
+      public static function run(Event $event)
       {
 
                     define("MIKRONUKE_VERSION", "0.2.99");
@@ -28,14 +28,7 @@ class Setup
                     file_put_contents($target_dir."/public/index.php", $index_file);
                     copy(__DIR__."/skel/skel_hdl.tpl",  $target_dir."/app/src/DefaultHandler.php");
 
-      }
-
-
-
-      public static function run(Event $event)
-      {
-              self::runSetup();
-      }
+     }
 
 
 }
