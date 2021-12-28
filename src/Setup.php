@@ -8,11 +8,16 @@ use Composer\Installer\PackageEvent;
 class Setup
 {
 
+     public static function runSetup($argv)
+     {
+                    $plain = false;
+                    $mn_loader = __DIR__."/mn_loader.php";
 
-      public static function run(Event $event)
-      {
-
-                    define("MIKRONUKE_VERSION", "0.2.99");
+                    if(isset($argv[1])) {
+                       if($argv[1] == "plain") {
+                          $plain = true;
+                       }
+                    }
 
                     $target_dir = getcwd();
 
@@ -22,13 +27,23 @@ class Setup
                             mkdir($target_dir."/".$dir, 0777, true);
                         }
                     }
-                    $index_file = file_get_contents(__DIR__."/skel/skel_idx.tpl");
-                    $index_file = str_replace("%version%",MIKRONUKE_VERSION, $index_file);
-                    $index_file = str_replace("%target%", $target_dir, $index_file);
-                    file_put_contents($target_dir."/public/index.php", $index_file);
+                    if($plain) {
+                        $index_file = file_get_contents(__DIR__."/skel/skel_idx_plain.tpl");
+                        $index_file = str_replace("%mn_loader%", $mn_loader, $index_file);
+                        file_put_contents($target_dir."/public/index.php", $index_file);
+                    } else {
+                        $index_file = file_get_contents(__DIR__."/skel/skel_idx.tpl");
+                        $index_file = str_replace("%target%", $target_dir, $index_file);
+                        file_put_contents($target_dir."/public/index.php", $index_file);
+                    }
                     copy(__DIR__."/skel/skel_hdl.tpl",  $target_dir."/app/src/DefaultHandler.php");
+      }
 
-     }
+      public static function run(Event $event)
+      {
+                $a = array();
+                self::runSetup($a);
+      }
 
 
 }

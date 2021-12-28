@@ -5,4 +5,4 @@ require_once __DIR__."/Setup.php";
 
 
 $setup = new com\augmentedlogic\mikronuke\Setup();
-$setup->runSetup();
+$setup->runSetup($argv);
