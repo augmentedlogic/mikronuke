@@ -39,6 +39,10 @@ class Request
         return $this->context['cookies'][$key];
     }
 
+    public function getPath(): string
+    {
+        return strtok($_SERVER["REQUEST_URI"], '?');
+    }
 
     public function getFile($key) : ReceivedFile
     {
@@ -56,45 +60,49 @@ class Request
     }
 
 
-    public function getParameter($k, $filter = FILTER_SANITIZE_STRING) : ?mixed
+    public function getParameter($k, string $def = null): ?string
     {
-        return $this->context['parameters'][$k];
+        if(isset($this->context['parameters'][$k])) {
+            return $this->context['parameters'][$k];
+        } else {
+            return $def;
+        }
     }
 
-    public function getInt($k) : ?int
+    public function getArray($k, array $def = null) : ?array
     {
-        return $this->parseInt($this->context['parameters'][$k]);
+        if(isset($this->context['parameters'][$k])) {
+          return (array) $this->context['parameters'][$k];
+        } else {
+          return $def;
+        }
     }
 
-    public function getNumber($k)
-    {
-        return $this->parseNumber($this->context['parameters'][$k]);
-    }
 
-    public function getNumberWithDefault($k, $default_value)
+    public function getNumber($k, $def = null)
     {
         $i = $this->parseNumber($this->context['parameters'][$k]);
         if(is_null($i)) {
-            return $default_value;
+            return $def;
         }
         return $i;
     }
 
-    public function getIntWithDefault($k, $default_value) : int
+    public function getInt($k, int $def = null) : ?int
     {
         $i = $this->parseInt($this->context['parameters'][$k]);
         if(is_null($i)) {
-            return $default_value;
+            return $def;
         }
         return $i;
     }
 
-    public function getString($k) : ?string
+    public function getString($k, string $def = null) : ?string
     {
         if(isset($this->context['parameters'][$k])) {
           return (String) strip_tags($this->context['parameters'][$k]);
         } else {
-          return null;
+          return $def;
         }
     }
 

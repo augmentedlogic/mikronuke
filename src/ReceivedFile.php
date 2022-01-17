@@ -12,22 +12,32 @@ class ReceivedFile
 {
 
      private $size = 0;
-     private $tmp_name = NULL;
-     private $filetype = NULL;
-     private $name = NULL;
+     private $tmp_name = null;
+     private $filetype = null;
+     private $name = null;
+     private $valid = false;
 
      public function __construct($file_props)
      {
-         $this->tmp_name = $file_props['tmp_name'];
-         $this->size = $file_props['size'];
-         $this->name = $file_props['name'];
-         $this->filetype = $file_props['type'];
+         if(isset($file_props['tmp_name'])) {
+           $this->tmp_name = $file_props['tmp_name'];
+           $this->size = $file_props['size'];
+           $this->name = $file_props['name'];
+           $this->filetype = $file_props['type'];
+           $this->valid = true;
+         }
      }
 
      public function getTmpName()
      {
          return $this->tmp_name;
      }
+
+     public function getName()
+     {
+         return $this->name;
+     }
+
 
      public function getSize()
      {
@@ -39,7 +49,18 @@ class ReceivedFile
          return $this->filetype;
      }
 
-     public function saveTo($targetdir, $name = NULL)
+     public function getMimetype()
+     {
+         return $this->filetype;
+     }
+
+     public function valid()
+     {
+         return $this->valid;
+     }
+
+
+     public function saveTo($targetdir, $name = null)
      {
          if(!$name) {
              $name = $this->name;
