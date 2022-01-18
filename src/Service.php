@@ -73,14 +73,14 @@ class Service {
         define("MN_LOG_DIR", $dir);
     }
 
-    public function enableBenchmarkLog($b)
+    public function enableBenchmarkLog()
     {
-        define("MN_ENABLE_BENCHMARK_LOG", $b);
+        define("MN_ENABLE_BENCHMARK_LOG", true);
     }
 
-    public function enableServiceLog($b)
+    public function enableServiceLog()
     {
-        define("MN_ENABLE_SERVICE_LOG", $b);
+        define("MN_ENABLE_SERVICE_LOG", true);
     }
 
     public function setTemplateDir($path)
@@ -242,7 +242,7 @@ class Service {
           }
 
           if(!defined("MN_ENABLE_SERVICE_LOG")) {
-             define("MN_ENABLE_SERVICE_LOG", true);
+             define("MN_ENABLE_SERVICE_LOG", false);
           }
 
 

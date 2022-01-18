@@ -10,4 +10,5 @@ require_once __DIR__."/NanoTemplate.php";
 require_once __DIR__."/Request.php";
 require_once __DIR__."/Routing.php";
 require_once __DIR__."/Toolkit.php";
+require_once __DIR__."/Cookie.php";
 
