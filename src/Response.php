@@ -31,17 +31,15 @@ class Response
         $this->status_code = $status_code;
     }
 
-    public function addCookie($name, $value, $expires = 0, $path = "", $domain = "", $secure = false, $httponly = false)
+    public function addCookieLegacy($name, $value, $expires = 0, $path = "", $domain = "", $secure = false, $httponly = false)
     {
         $this->cookies[$name] = array("value" => $value, "expires" => $expires, "path" => $path, "domain" => $domain, "secure" => $secure, "httponly" => $httponly);
     }
 
-    public function addCookieNew(Cookie $c)
+    public function addCookie(Cookie $c)
     {
         $this->cookies[$c->getName()] = array("value" => $c->getValue(), "expires" => $c->getExpire(), "path" => $c->getPath(), "domain" => $c->getDomain(), "secure" => $c->getSecure(), "httponly" => $c->getHttpOnly());
     }
-
-
 
     public function delCookie($name)
     {

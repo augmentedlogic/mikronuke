@@ -34,9 +34,13 @@ class Request
         $this->context = $params;
     }
 
-    public function getCookie($key, $filter = FILTER_SANITIZE_STRING) : ?string
+    public function getCookie($key) : ?string
     {
-        return $this->context['cookies'][$key];
+        if(isset($this->context['cookies'][$key])) {
+           return $this->context['cookies'][$key];
+        } else {
+           return null;
+        }
     }
 
     public function getPath(): string
