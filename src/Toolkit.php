@@ -14,27 +14,6 @@ class Toolkit
     const RANDOM_BASE64 = 2;
     const RANDOM_ALNUM = 3;
 
-    public static function log($msg, $level = 1, $filename = "app.log")
-    {
-        if($level <= MN_LOG_LEVEL) {
-            file_put_contents(MN_LOG_DIR."/". $filename, date("Y M j G:i:s", time())." ".$msg."\n", FILE_APPEND);
-        }
-    }
-
-
-    public static function twig_get()
-    {
-        $loader = new \Twig\Loader\FilesystemLoader(MN_TWIG_VIEW_DIR);
-        $twig = new \Twig\Environment($loader, ['cache' => MN_TWIG_CACHE_DIR,]);
-        return $twig;
-    }
-
-    public static function getTwig()
-    {
-        $loader = new \Twig\Loader\FilesystemLoader(MN_TWIG_VIEW_DIR);
-        $twig = new \Twig\Environment($loader, ['cache' => MN_TWIG_CACHE_DIR,]);
-        return $twig;
-    }
 
     private static function enc_string($length, $encoding) {
         if (function_exists("random_bytes")) {
@@ -54,20 +33,7 @@ class Toolkit
         }
     }
 
-    public static function genUUIDv4(): string
-    {
-        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-                mt_rand(0, 0xffff), mt_rand(0, 0xffff),
-                mt_rand(0, 0xffff),
-                mt_rand(0, 0x0fff) | 0x4000,
-                mt_rand(0, 0x3fff) | 0x8000,
-                mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
-                );
-    }
-
-    private static function random_str(
-            int $length = 64,
-            string $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'): string
+    private static function random_str(int $length = 64, string $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'): string
     {
 
             if ($length < 1) {
@@ -81,6 +47,52 @@ class Toolkit
         }
         return implode('', $pieces);
     }
+
+    public static function log($msg, $level = 1, $filename = "app.log")
+    {
+        if($level <= MN_LOG_LEVEL) {
+            file_put_contents(MN_LOG_DIR."/". $filename, date("Y M j G:i:s", time())." ".$msg."\n", FILE_APPEND);
+        }
+    }
+
+    /**
+     * public Toolkit methods start here
+     **/
+
+    // Legacy method
+    public static function twig_get()
+    {
+        $loader = new \Twig\Loader\FilesystemLoader(MN_TWIG_VIEW_DIR);
+        $twig = new \Twig\Environment($loader, ['cache' => MN_TWIG_CACHE_DIR,]);
+        return $twig;
+    }
+
+
+    // Will be replaced by a dedicated class in future versions
+    public static function getTwig()
+    {
+        $twig = null;
+        if(class_exists("Twig\\Loader\\FilesystemLoader")) {
+          $loader = new \Twig\Loader\FilesystemLoader(MN_TWIG_VIEW_DIR);
+          $twig = new \Twig\Environment($loader, ['cache' => MN_TWIG_CACHE_DIR,]);
+        }
+        return $twig;
+    }
+
+
+    /**
+     *
+     **/
+     public static function genUUIDv4(): string
+     {
+        return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+                mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+                mt_rand(0, 0xffff),
+                mt_rand(0, 0x0fff) | 0x4000,
+                mt_rand(0, 0x3fff) | 0x8000,
+                mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+                );
+     }
 
      /**
       *
@@ -103,8 +115,7 @@ class Toolkit
               break;
 
          }
-
-         return $hs;
+     return $hs;
      }
 
 }
