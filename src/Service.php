@@ -73,6 +73,16 @@ class Service {
         define("MN_LOG_DIR", $dir);
     }
 
+    public function enableBenchmarkLog($b)
+    {
+        define("MN_ENABLE_BENCHMARK_LOG", $b);
+    }
+
+    public function enableServiceLog($b)
+    {
+        define("MN_ENABLE_SERVICE_LOG", $b);
+    }
+
     public function setTemplateDir($path)
     {
         define("MN_TEMPLATE_DIR", $path);
@@ -123,9 +133,18 @@ class Service {
         return array();
     }
 
-    private function log($msg, $level = 1)
+    private function log($msg, $level = 0)
     {
-        file_put_contents(constant("MN_LOG_DIR")."/mn.log", date("Y M j G:i:s", time())." ".$msg."\n", FILE_APPEND);
+        if(constant("MN_ENABLE_SERVICE_LOG")) {
+           file_put_contents(constant("MN_LOG_DIR")."/service.log", date("Y M j G:i:s", time())." ".$msg."\n", FILE_APPEND);
+        }
+    }
+
+    private function benchmark_log($msg)
+    {
+        if(constant("MN_ENABLE_BENCHMARK_LOG")) {
+           file_put_contents(constant("MN_LOG_DIR")."/benchmark.log", date("Y M j G:i:s", time())." ".$msg."\n", FILE_APPEND);
+        }
     }
 
 
@@ -218,6 +237,14 @@ class Service {
              define("MN_LOG_DIR", $install_dir."/log");
           }
 
+          if(!defined("MN_ENABLE_BENCHMARK_LOG")) {
+             define("MN_ENABLE_BENCHMARK_LOG", false);
+          }
+
+          if(!defined("MN_ENABLE_SERVICE_LOG")) {
+             define("MN_ENABLE_SERVICE_LOG", true);
+          }
+
 
         $b_start = microtime(true);
         $path_only = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -234,6 +261,7 @@ class Service {
         }
 
         $handler = $this->decideRoute($path_only);
+            $this->log("route {$path_only } to {$handler}");
         if(!$handler) {
             http_response_code(404);
             print "Not found";
@@ -246,7 +274,7 @@ class Service {
             $Instance = new $handler;
             $Instance->handle($request, $response);
             $b_time = round($this->benchmark() - $this->b_start, 4);
-            $this->log($handler ." => ". $b_time, 1);
+            $this->benchmark_log($handler ." => ". $b_time, 1);
             if($this->setting_debugger) {
                 $this->debugger();
             }

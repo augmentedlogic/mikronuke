@@ -14,7 +14,7 @@ class Toolkit
     const RANDOM_BASE64 = 2;
     const RANDOM_ALNUM = 3;
 
-    public static function log($msg, $level = 1, $filename = "mikronuke.log")
+    public static function log($msg, $level = 1, $filename = "app.log")
     {
         if($level <= MN_LOG_LEVEL) {
             file_put_contents(MN_LOG_DIR."/". $filename, date("Y M j G:i:s", time())." ".$msg."\n", FILE_APPEND);
