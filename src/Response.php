@@ -38,7 +38,7 @@ class Response
 
     public function addCookie(Cookie $c)
     {
-        $this->cookies[$c->getName()] = array("value" => $c->getValue(), "expires" => $c->getExpire(), "path" => $c->getPath(), "domain" => $c->getDomain(), "secure" => $c->getSecure(), "httponly" => $c->getHttpOnly());
+        $this->cookies[$c->getName()] = array("value" => $c->getValue(), "expires" => $c->getExpire(), "path" => $c->getPath(), "domain" => $c->getDomain(), "secure" => $c->getSecure(), "httponly" => $c->getHttpOnly(), "SameSite" => $c->getSameSite());
     }
 
     public function delCookie($name)

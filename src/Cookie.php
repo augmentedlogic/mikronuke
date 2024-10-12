@@ -23,6 +23,7 @@ class Cookie
     private $maxage = 0;
     private $httponly = false;
     private $path = "";
+    private $same_site = "Strict";
     private $domain = "";
 
     function __construct($name)
@@ -73,6 +74,11 @@ class Cookie
        return $this;
     }
 
+    public function setSameSite($s = "Strict")
+    {
+       $this->same_site = $s;
+       return $this;
+    }
 
 
     public function getName()
@@ -113,6 +119,11 @@ class Cookie
     public function getMaxAge()
     {
        return $this->maxage;
+    }
+
+    public function getSameSite()
+    {
+       return $this->same_site;
     }
 
 }
