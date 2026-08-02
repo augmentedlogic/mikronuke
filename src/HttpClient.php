@@ -1,63 +1,61 @@
 <?php
+
 /**
- *
  * @copyright 2020 Wolfgang Hauptfleisch <dev@augmentedlogic.com>
  * Apache Licence Version 2.0
  * This file is part of mikronuke
- *
- **/
+ */
+
 namespace com\augmentedlogic\mikronuke;
 
 class HttpClient
 {
-
     private $fields = array();
     private $headers = array();
-    private $status_scode = 0;
-    private $user_agent = "mikronuke http client";
-    private $follow_redirect = false;
-
-    private $setting_verify_ssl = true;
-    private $setting_timeout = 8000;
-    private $setting_connect_timeout = 8000;
-    private $setting_mimetype = "";
+    private int $status_scode = 0;
+    private string $user_agent = 'mikronuke http client';
+    private bool $follow_redirect = false;
+    private bool $setting_verify_ssl = true;
+    private int $setting_timeout = 8000;
+    private int $setting_connect_timeout = 8000;
+    private string $setting_mimetype = '';
 
     // todo custom headers
 
-    public function setParameter($key, $value) : void
+    public function setParameter(string $key, string $value): void
     {
         $this->fields[$key] = $value;
     }
 
-    public function addHeader($header) : void
+    public function addHeader(string $header): void
     {
         $this->headers[] = $header;
     }
 
-    public function setFollowRedirect(bool $value) : void
+    public function setFollowRedirect(bool $value): void
     {
         $this->follow_redirect = $value;
     }
 
-    public function setUserAgent(string $value) : void
+    public function setUserAgent(string $value): void
     {
         $this->user_agent = $value;
     }
 
-    public function getStatusCode() : int
+    public function getStatusCode(): ?int
     {
         return $this->status_code;
     }
 
-    public function get(String $url) : string
+    public function get(string $url): ?string
     {
-        $fields_string = "";
-        foreach($this->fields as $key=>$value) {
-            $fields_string .= $key.'='.rawurlencode($value).'&';
+        $fields_string = '';
+        foreach ($this->fields as $key => $value) {
+            $fields_string .= $key . '=' . rawurlencode($value) . '&';
         }
         $fields_string = rtrim($fields_string, '&');
-        if(!empty($fields_string)) {
-                $url = $url . "?" . $fields_string;
+        if (!empty($fields_string)) {
+            $url = $url . '?' . $fields_string;
         }
 
         $ch = curl_init();
@@ -72,11 +70,11 @@ class HttpClient
         return $response;
     }
 
-    public function post(String $url) : string
+    public function post(string $url): ?string
     {
-        $fields_string = "";
-        foreach($this->fields as $key=>$value) {
-            $fields_string .= $key.'='.rawurlencode($value).'&';
+        $fields_string = '';
+        foreach ($this->fields as $key => $value) {
+            $fields_string .= $key . '=' . rawurlencode($value) . '&';
         }
         $fields_string = rtrim($fields_string, '&');
 
@@ -91,6 +89,4 @@ class HttpClient
         curl_close($ch);
         return $response;
     }
-
 }
-

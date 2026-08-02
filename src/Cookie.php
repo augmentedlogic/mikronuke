@@ -1,129 +1,124 @@
 <?php
+
 /**
- *
  * @copyright 2020 Wolfgang Hauptfleisch <dev@augmentedlogic.com>
  * Apache Licence Version 2.0
  * This file is part of mikronuke
- *
- **/
+ */
+
 namespace com\augmentedlogic\mikronuke;
 
 class Cookie
 {
-
     public const DAY = 86000;
     public const MIN = 60;
     public const HOUR = 3600;
 
+    private ?string $name = null;
+    private ?string $value = null;
+    private bool $secure = false;
+    private int $expire = 0;
+    private int $maxage = 0;
+    private bool $httponly = true;
+    private string $path = '/';
+    private string $same_site = 'Strict';
+    private string $domain = '';
 
-    private $name;
-    private $value;
-    private $secure = false;
-    private $expire = 0;
-    private $maxage = 0;
-    private $httponly = false;
-    private $path = "";
-    private $same_site = "Strict";
-    private $domain = "";
-
-    function __construct($name)
+    function __construct(string $name)
     {
         $this->name = $name;
     }
 
-    public function setValue($value)
+    public function setValue(string $value): Cookie
     {
-       $this->value = $value;
-       return $this;
+        $this->value = $value;
+        return $this;
     }
 
-    public function setExpires($value)
+    public function setExpires(int $t): Cookie
     {
-       $this->expire = $value;
-       return $this;
+        $this->expire = $t;
+        return $this;
     }
 
-    public function setMaxAge($t)
+    public function setMaxAge(int $t): Cookie
     {
-       $this->maxage = $t;
-       return $this;
+        $this->expire = time() + $t;
+        return $this;
     }
 
-
-    public function setSecure($b = false)
+    public function setSecure(bool $b = false): Cookie
     {
-       $this->secure = $b;
-       return $this;
+        $this->secure = $b;
+        return $this;
     }
 
-    public function setHttpOnly($b = false)
+    public function setHttpOnly(bool $b = false): Cookie
     {
-       $this->httponly = $b;
-       return $this;
+        $this->httponly = $b;
+        return $this;
     }
 
-    public function setPath($p = "")
+    public function setPath(string $p = '/'): Cookie
     {
-       $this->path = $p;
-       return $this;
+        $this->path = $p;
+        return $this;
     }
 
-    public function setDomain($d = "")
+    public function setDomain(string $d = ''): Cookie
     {
-       $this->domain = $d;
-       return $this;
+        $this->domain = $d;
+        return $this;
     }
 
-    public function setSameSite($s = "Strict")
+    public function setSameSite(string $s = 'Strict'): Cookie
     {
-       $this->same_site = $s;
-       return $this;
+        $this->same_site = $s;
+        return $this;
     }
 
-
-    public function getName()
+    public function getName(): ?string
     {
-       return $this->name;
+        return $this->name;
     }
 
-    public function getValue()
+    public function getValue(): ?string
     {
-       return $this->value;
+        return $this->value;
     }
 
-    public function getExpire()
+    public function getExpire(): ?int
     {
-       return $this->expire;
+        return $this->expire;
     }
 
-    public function getSecure()
+    public function getSecure(): ?bool
     {
-       return $this->secure;
+        return $this->secure;
     }
 
-    public function getHttpOnly()
+    public function getHttpOnly(): bool
     {
-       return $this->httponly;
+        return $this->httponly;
     }
 
-    public function getPath()
+    public function getPath(): ?string
     {
-       return $this->path;
+        return $this->path;
     }
 
-    public function getDomain()
+    public function getDomain(): ?string
     {
-       return $this->domain;
+        return $this->domain;
     }
 
-    public function getMaxAge()
+    public function getMaxAge(): ?int
     {
-       return $this->maxage;
+        return $this->maxage;
     }
 
-    public function getSameSite()
+    public function getSameSite(): ?string
     {
-       return $this->same_site;
+        return $this->same_site;
     }
-
 }

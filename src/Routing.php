@@ -1,39 +1,53 @@
 <?php
+
 /**
- *
  * @copyright 2020 Wolfgang Hauptfleisch <dev@augmentedlogic.com>
  * Apache Licence Version 2.0
  * This file is part of mikronuke
- *
- **/
+ */
+
 namespace com\augmentedlogic\mikronuke;
 
 class Routing
 {
-    private $routes = array();
-    private $redirects = array();
+    private array $routes = array();
+    private array $redirects = array();
+    private ?string $namesp = null;
+    private bool $automatic_loading = false;
 
-
-    public function add(String $path, String $handler)
+    public function loadApp($namesp = null, $automatic_loading = false): void
     {
-        $this->routes[] = array("path" => $path, "handler" => $handler);
+        $this->namesp = $namesp;
+        $this->automatic_loading = $automatic_loading;
     }
 
-    public function redirect(String $path, String $newpath, int $response_code = 302)
+    public function add(String $path, String $handler): void
     {
-        $this->redirects[] = array("path" => $path, "newpath" => $newpath, "response_code" => $response_code);
+        $this->routes[] = array('path' => $path, 'handler' => $handler);
     }
 
-    public function getRoutes()
+    public function redirect(String $path, String $newpath, int $response_code = 302): void
+    {
+        $this->redirects[] = array('path' => $path, 'newpath' => $newpath, 'response_code' => $response_code);
+    }
+
+    public function getRoutes(): array
     {
         return $this->routes;
     }
 
-    public function getRedirects()
+    public function getNamespace(): ?string
+    {
+        return $this->namesp;
+    }
+
+    public function getAutomaticLoading(): bool
+    {
+        return $this->automatic_loading;
+    }
+
+    public function getRedirects(): array
     {
         return $this->redirects;
     }
-
 }
-
-
