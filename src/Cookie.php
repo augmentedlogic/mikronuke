@@ -53,7 +53,7 @@ class Cookie
         return $this;
     }
 
-    public function setHttpOnly(bool $b = false): Cookie
+    public function setHttpOnly(?bool $b = true): Cookie
     {
         $this->httponly = $b;
         return $this;
