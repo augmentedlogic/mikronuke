@@ -60,12 +60,29 @@ class Request
         $this->context = $params;
     }
 
-    public function getCookie(string $key): ?string
+    public function getCookie(string $key, mixed $default_value = null): mixed
     {
         if (isset($this->context['cookies'][$key])) {
             return $this->context['cookies'][$key];
         } else {
-            return null;
+            return $default_value;
+        }
+    }
+
+    public function hasCookie(string $key): bool
+    {
+        if (isset($this->context['cookies'][$key])) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getCookieValue(string $key, mixed $default_value = null): mixed
+    {
+        if (isset($this->context['cookies'][$key])) {
+            return $this->context['cookies'][$key];
+        } else {
+            return $default_value;
         }
     }
 

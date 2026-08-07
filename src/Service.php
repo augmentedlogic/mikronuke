@@ -24,6 +24,7 @@ class Service
     private array $redirects = array();
     private array $url_array = array();
     private bool $enable_buffer = false;
+    private ?string $load_src_dir = null;
 
     private $context = array('server' => array(),
         'headers' => array(),
@@ -60,6 +61,44 @@ class Service
                 // print "loading {$file->getPathname()}\n";
                 require $file->getPathname();
             }
+        }
+    }
+
+    private function autoload($class): void
+    {
+        $prefix = $this->namesp;
+        if ($this->namesp !== null) {
+            $base_dir = $this->load_src_dir;
+
+            $len = strlen($prefix);
+            if (strncmp($prefix, $class, $len) !== 0) {
+                return;
+            }
+
+            $relative_class = substr($class, $len);
+            $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
+            if (file_exists($file)) {
+                require $file;
+            }
+        }
+    }
+
+    public function loadApp($load_prefix, $load_src_dir = null)
+    {
+        $this->namesp = $load_prefix;
+        $this->load_src_dir = $load_src_dir;
+        $this->automatic_loading = true;
+        spl_autoload_register([$this, 'autoload']);
+    }
+
+    public function psr4_autoloader($class)
+    {
+        $class_path = str_replace('\\', '/', $class);
+        $file = $this->setting_app_dir . $class_path . '.php';
+
+        // if the file exists, require it
+        if (file_exists($file)) {
+            require $file;
         }
     }
 

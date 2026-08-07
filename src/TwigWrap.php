@@ -46,9 +46,10 @@ class TwigWrap
         $this->twig = $twig;
     }
 
-    public function set(string $key, mixed $value): void
+    public function set(string $key, mixed $value): TwigWrap
     {
         $this->parameters[$key] = $value;
+        return $this;
     }
 
     public function render(): string

@@ -15,6 +15,7 @@ class Routing
     private ?string $namesp = null;
     private bool $automatic_loading = false;
 
+    #[\Deprecated(message: 'use the Service class instead', since: '0.2.1')]
     public function loadApp($namesp = null, $automatic_loading = false): void
     {
         $this->namesp = $namesp;

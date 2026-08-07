@@ -23,6 +23,11 @@ class LogTool
     function __construct(string $logtarget = 'service')
     {
         $this->logfile = $logtarget;
+
+        if (!defined('MN_LOG_LEVEL')) {
+            define('MN_LOG_LEVEL', 1);
+        }
+
         if (!defined('MN_LOG_DATE_FORMAT')) {
             define('MN_LOG_DATE_FORMAT', 'Y M j G:i:s');
         }
@@ -49,9 +54,19 @@ class LogTool
         return $this;
     }
 
+    public static function log($msg, $level = 1, $filename = 'app.log')
+    {
+        if (!defined('MN_LOG_LEVEL')) {
+            define('MN_LOG_LEVEL', 1);
+        }
+        if ($level >= MN_LOG_LEVEL) {
+            file_put_contents(MN_LOG_DIR . '/' . $filename, date('Y M j G:i:s', time()) . ' ' . $msg . "\n", FILE_APPEND);
+        }
+    }
+
     public function write(string $msg, $level = 1): void
     {
-        if ($level <= MN_LOG_LEVEL) {
+        if ($level >= MN_LOG_LEVEL) {
             $line = date('Y M j G:i:s', time()) . ' ' . $msg . "\n";
             if ($this->tag !== null) {
                 $line = date('Y M j G:i:s', time()) . ' [' . $this->tag . '] ' . $msg . "\n";

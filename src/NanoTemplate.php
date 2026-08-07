@@ -25,10 +25,11 @@ class NanoTemplate
         return $matches;
     }
 
-    public function set(string $k, mixed $v): void
+    public function set(string $k, mixed $v): NanoTemplate
     {
         $this->keys[] = $k;
         $this->values[] = $v;
+        return $this;
     }
 
     public function render(): string
