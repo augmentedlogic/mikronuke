@@ -7,8 +7,28 @@ use Composer\Script\Event;
 
 class Setup
 {
-    public static function runSetup($argv)
+    private array $argv = array();
+    private ?string $install_dir = null;
+
+    private function getArgument(string $arg, mixed $default_value = null): mixed
     {
+        foreach ($this->argv as $i => $a) {
+            if ($a == $arg) {
+                if (isset($this->argv[$i + 1])) {
+                    return $this->argv[$i + 1];
+                } else {
+                    return $default_value;
+                }
+            }
+        }
+        return $default_value;
+    }
+
+    public function runSetup($argv)
+    {
+        $this->argv = $argv;
+
+        $this->install_dir = $this->getArgument('-d', null);
         $plain = false;
         $mn_loader = __DIR__ . '/mn_loader.php';
 
@@ -18,7 +38,10 @@ class Setup
             }
         }
 
-        $target_dir = getcwd();
+        $target_dir = $this->install_dir;
+        if ($target_dir == null) {
+            $target_dir = getcwd();
+        }
 
         $dirs = array('public', 'app/src', 'app/view', 'log');
         foreach ($dirs as $dir) {

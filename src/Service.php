@@ -64,6 +64,12 @@ class Service
         }
     }
 
+    private function startsWith(string $path, string $url_path): bool
+    {
+        $len = strlen($url_path);
+        return (substr($path, 0, $len) === $url_path);
+    }
+
     private function autoload($class): void
     {
         $prefix = $this->namesp;
@@ -83,74 +89,67 @@ class Service
         }
     }
 
-    public function loadApp($load_prefix, $load_src_dir = null)
+    public function loadApp($load_prefix, $load_src_dir = null): Service
     {
         $this->namesp = $load_prefix;
         $this->load_src_dir = $load_src_dir;
         $this->automatic_loading = true;
         spl_autoload_register([$this, 'autoload']);
+        return $this;
     }
 
-    public function psr4_autoloader($class)
-    {
-        $class_path = str_replace('\\', '/', $class);
-        $file = $this->setting_app_dir . $class_path . '.php';
-
-        // if the file exists, require it
-        if (file_exists($file)) {
-            require $file;
-        }
-    }
-
-    private function startsWith(string $path, string $url_path): bool
-    {
-        $len = strlen($url_path);
-        return (substr($path, 0, $len) === $url_path);
-    }
-
-    public function showDebugConsole(bool $b): void
+    public function showDebugConsole(bool $b): Service
     {
         $this->setting_debugger = $b;
+        return $this;
     }
 
-    public function setAppDir(string $path): void
+    public function setAppDir(string $path): Service
     {
         $this->setting_app_dir = $path;
+        return $this;
     }
 
-    public function setSourceDir(string $path): void
+    public function setSourceDir(string $path): Service
     {
         $this->setting_app_dir = $path;
+        return $this;
     }
 
-    public function setLogDir(string $dir): void
+    public function setLogDir(string $dir): Service
     {
         define('MN_LOG_DIR', $dir);
+        return $this;
     }
 
-    public function enableBenchmarkLog(): void
+    public function enableBenchmarkLog(): Service
     {
         define('MN_ENABLE_BENCHMARK_LOG', true);
+        return $this;
     }
 
-    public function enableBuffer(bool $enable_buffer): void
+    public function enableBuffer(bool $enable_buffer = true): Service
     {
         $this->enable_buffer = $enable_buffer;
+        return $this;
     }
 
-    public function enableServiceLog(): void
+    public function enableServiceLog(): Service
     {
         define('MN_ENABLE_SERVICE_LOG', true);
+        return $this;
     }
 
-    public function setTemplateDir(string $path): void
+    public function setTemplateDir(string $path): Service
     {
         define('MN_TEMPLATE_DIR', $path);
+        return $this;
     }
 
-    public function setLogLevel(int $level): void
+    public function setLogLevel(int $level): Service
     {
         define('MN_LOG_LEVEL', $level);
+        return $this;
     }
 
     public function extract_url_parameters(string $urlpath, string $config_path): void

@@ -1,14 +1,10 @@
 <?php
 
-require_once __DIR__ . '/HttpClient.php';
-require_once __DIR__ . '/HttpHandler.php';
-require_once __DIR__ . '/ReceivedFile.php';
-require_once __DIR__ . '/Response.php';
-require_once __DIR__ . '/Service.php';
-require_once __DIR__ . '/HttpClient.php';
-require_once __DIR__ . '/NanoTemplate.php';
-require_once __DIR__ . '/Request.php';
-require_once __DIR__ . '/FilterRule.php';
-require_once __DIR__ . '/Routing.php';
-require_once __DIR__ . '/Toolkit.php';
-require_once __DIR__ . '/Cookie.php';
+/**
+ * This autoloadder is only for cases where mikronuke is used without composer,
+ * otherwise ignore
+ */
+spl_autoload_register(function ($class_name) {
+    $class_name = str_replace('com\\augmentedlogic\\mikronuke\\', '', $class_name);
+    include __DIR__ . '/' . $class_name . '.php';
+});

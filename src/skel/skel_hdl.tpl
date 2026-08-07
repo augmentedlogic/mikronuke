@@ -1,5 +1,7 @@
 <?php
 
+namespace com\example\page;
+
 use \com\augmentedlogic\mikronuke\Request;
 use \com\augmentedlogic\mikronuke\Response;
 use \com\augmentedlogic\mikronuke\HttpHandler;

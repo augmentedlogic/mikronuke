@@ -22,14 +22,16 @@ class Routing
         $this->automatic_loading = $automatic_loading;
     }
 
-    public function add(String $path, String $handler): void
+    public function add(String $path, String $handler): Routing
     {
         $this->routes[] = array('path' => $path, 'handler' => $handler);
+        return $this;
     }
 
-    public function redirect(String $path, String $newpath, int $response_code = 302): void
+    public function redirect(String $path, String $newpath, int $response_code = 302): Service
     {
         $this->redirects[] = array('path' => $path, 'newpath' => $newpath, 'response_code' => $response_code);
+        return $this;
     }
 
     public function getRoutes(): array
