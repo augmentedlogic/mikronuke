@@ -1,7 +1,11 @@
 {
     "name": "augmentedlogic/mikronuke",
-    "description": "A small framework for webservices",
+    "description": "A lightweight framework for webservices or websites",
     "homepage": "https://developer.augmentedlogic.com",
+    "keywords": [
+      "framework",
+      "webservice"
+    ],
     "license": "Apache-2.0",
     "authors": [
         {
@@ -10,7 +14,7 @@
         }
     ],
     "require": {
-       "php": ">=7.3"
+       "php": ">=8.4"
     },
     "autoload": {
         "psr-4": {
