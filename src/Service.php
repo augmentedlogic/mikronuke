@@ -332,7 +332,7 @@ class Service
 
             // if autoloader is on
             if ($this->automatic_loading == true) {
-                $this->autoloader();
+                //$this->autoloader();
             } else {
                 require_once $this->setting_app_dir . '/' . $handler . '.php';
             }
