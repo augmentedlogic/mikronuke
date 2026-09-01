@@ -50,20 +50,6 @@ class Service
         $this->setting_log_dir = str_replace('/public', '', $this->setting_base_dir) . '/log';
     }
 
-    private function autoloader(): void
-    {
-        $rii = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->setting_app_dir));
-        foreach ($rii as $file) {
-            if ($file->isDir()) {
-                continue;
-            }
-            if (str_ends_with($file->getPathname(), '.php')) {
-                // print "loading {$file->getPathname()}\n";
-                require $file->getPathname();
-            }
-        }
-    }
-
     private function startsWith(string $path, string $url_path): bool
     {
         $len = strlen($url_path);
@@ -330,9 +316,9 @@ class Service
                 $handler = $this->namesp . '\\' . $handler;
             }
 
-            // if autoloader is on
+            // if autoloader is on, we do not need to do anything
             if ($this->automatic_loading == true) {
-                //$this->autoloader();
+                //
             } else {
                 require_once $this->setting_app_dir . '/' . $handler . '.php';
             }
@@ -340,7 +326,7 @@ class Service
             $Instance = new $handler;
             $Instance->handle($request, $response);
 
-            // TODO check for disabled buffer in response
+            // check for buffer
             if ($this->enable_buffer == true) {
                 ob_get_clean();
             }

@@ -10,11 +10,15 @@ namespace com\augmentedlogic\mikronuke;
 
 class Toolkit
 {
-    const RANDOM_HEX = 1;
-    const RANDOM_BASE64 = 2;
-    const RANDOM_ALNUM = 3;
+    public const RANDOM_HEX = 1;
+    public const RANDOM_BASE64 = 2;
+    public const RANDOM_ALNUM = 3;
+    public const NAMESPACE_URL = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
+    public const NANESPACE_DNS = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
+    public const NAMESPACE_OID = '6ba7b812-9dad-11d1-80b4-00c04fd430c8';
+    public const NAMESPACE_X500 = '6ba7b814-9dad-11d1-80b4-00c04fd430c8';
 
-    private static function enc_string($length, $encoding)
+    private static function enc_string(int $length, int $encoding): string
     {
         if (function_exists('random_bytes')) {
             $bytes = random_bytes($length);
@@ -82,7 +86,36 @@ class Toolkit
         return $twig;
     }
 
-    public static function genToken($length = 16, $enc = 0): string
+    public static function slugify(string $s, bool $ext = false): string
+    {
+        $s = preg_replace('/[^\pL\d]+/u', '-', trim($s));
+        $s = trim($s, '-');
+        $s = iconv('utf-8', 'us-ascii//TRANSLIT', $s);
+        $s = strtolower($s);
+        $s = preg_replace('/[^-\w]+/', '', $s);
+        if ($ext == true) {
+            $s = $s . '-' . bin2hex(random_bytes(3));
+        }
+        return $s;
+    }
+
+    public static function imageToBase64(string $path): ?string
+    {
+        $base64 = null;
+        if (file_exists($path)) {
+            try {
+                $type = pathinfo($path, PATHINFO_EXTENSION);
+                $data = file_get_contents($path);
+                $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+                $path = 'myfolder/myimage.png';
+            } catch (Exception $e) {
+                return null;
+            }
+        }
+        return $base64;
+    }
+
+    public static function genToken(int $length = 16, int $enc = 0): string
     {
         if ($enc == 1) {
             return base64_encode(random_bytes($length));
@@ -100,7 +133,25 @@ class Toolkit
             mt_rand(0, 0xFFFF), mt_rand(0, 0xFFFF), mt_rand(0, 0xFFFF));
     }
 
-    public static function genRandomString($length, $encoding = Toolkit::RANDOM_BASE64): string
+    public static function genUUIDv5(string $namesp, string $name): string
+    {
+        $nhex = str_replace(array('-', '{', '}'), '', $namesp);
+        $nstr = '';
+        for ($i = 0; $i < strlen($nhex); $i += 2) {
+            $nstr .= chr(hexdec($nhex[$i] . $nhex[$i + 1]));
+        }
+
+        $hash = sha1($nstr . $name);
+
+        return sprintf('%08s-%04s-%04x-%04x-%12s',
+            substr($hash, 0, 8),
+            substr($hash, 8, 4),
+            (hexdec(substr($hash, 12, 4)) & 0xFFF) | 0x5000,
+            (hexdec(substr($hash, 16, 4)) & 0x3FFF) | 0x8000,
+            substr($hash, 20, 12));
+    }
+
+    public static function genRandomString(int $length, int $encoding = Toolkit::RANDOM_BASE64): string
     {
         $hs = '';
         switch ($encoding) {

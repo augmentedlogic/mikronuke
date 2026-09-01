@@ -23,7 +23,14 @@ class Console
     private ?string $load_prefix = null;
     private ?string $load_src_dir = null;
 
-    private function autoloader($class)
+    public function __construct($argv = null)
+    {
+        if ($argv != null) {
+            $this->argv = $argv;
+        }
+    }
+
+    private function autoload($class)
     {
         $prefix = $this->load_prefix;
         $base_dir = $this->load_src_dir;
@@ -44,14 +51,7 @@ class Console
     {
         $this->load_prefix = $load_prefix;
         $this->load_src_dir = $load_src_dir;
-        spl_autoload_register([$this, 'autoloader']);
-    }
-
-    public function __construct($argv = null)
-    {
-        if ($argv != null) {
-            $this->argv = $argv;
-        }
+        spl_autoload_register([$this, 'autoload']);
     }
 
     public function setLogLevel(int $log_level)

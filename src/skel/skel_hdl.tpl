@@ -1,6 +1,6 @@
 <?php
 
-namespace com\example\page;
+namespace com\example\website;
 
 use \com\augmentedlogic\mikronuke\Request;
 use \com\augmentedlogic\mikronuke\Response;
