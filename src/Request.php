@@ -190,4 +190,17 @@ class Request
         }
         return false;
     }
+
+    public function getRemoteAddress(): string
+    {
+        return $this->context['server']['REMOTE_ADDR'];
+    }
+
+    public function getUserAgent(): ?string
+    {
+        if (empty($this->context['server']['HTTP_USER_AGENT'])) {
+            return null;
+        }
+        return $this->context['server']['HTTP_USER_AGENT'];
+    }
 }
